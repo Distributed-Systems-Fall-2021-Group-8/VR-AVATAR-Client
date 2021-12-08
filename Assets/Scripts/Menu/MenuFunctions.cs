@@ -27,9 +27,4 @@ public class MenuFunctions : MonoBehaviour
         ConnectionData.address = newAddress;
     }
 
-    public void changePort(string newPort)
-    {
-        ConnectionData.port = newPort;
-    }
-
 }
