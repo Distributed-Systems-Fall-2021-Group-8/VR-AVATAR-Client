@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
+using UIChat;
 
 public class ConnectionManager : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class ConnectionManager : MonoBehaviour
     string id;
     Dictionary<string, OtherPlayer> otherPlayers;
     SocketIOComponent socket;
+    public ChatController chatController;
+    private bool connected = false;
+
     void Start()
     {
         otherPlayers = new Dictionary<string, OtherPlayer>();
@@ -20,6 +24,7 @@ public class ConnectionManager : MonoBehaviour
         socket.On("positionsChange", OnPositionsChange);
         socket.On("playerJoin", OnPlayerJoin);
         socket.On("playerLeave", OnPlayerLeave);
+        socket.On("receiveChatMessage", OnReceiveChatMessage);
     }
 
 
@@ -32,6 +37,7 @@ public class ConnectionManager : MonoBehaviour
         socket.Emit("playerJoin", new JSONObject(data));
         Debug.Log("Connected with socket id " + socket.sid);
         id = socket.sid;
+        connected = true;
     }
 
     public void OnPositionsChange(SocketIOEvent ev)
@@ -86,6 +92,28 @@ public class ConnectionManager : MonoBehaviour
     public void disconnect()
     {
         socket.Emit("disconnect");
+    }
+
+    public void sendMessage(string message)
+    {
+        if(connected)
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data["content"] = message;
+            data["name"] = OwnData.name;
+            socket.Emit("sendChatMessage", new JSONObject(data));
+        } else
+        {
+            chatController.ComeMessageString(OwnData.name + "(offline): " + message);
+        }
+        
+    }
+
+    public void OnReceiveChatMessage(SocketIOEvent ev)
+    {
+        string content = ev.data["content"].ToString().Substring(1, ev.data["content"].ToString().Length - 2);
+        string name = ev.data["name"].ToString().Substring(1, ev.data["name"].ToString().Length - 2);
+        chatController.ComeMessageString(name + ": " + content);
     }
 
 }
