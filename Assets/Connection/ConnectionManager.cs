@@ -47,7 +47,7 @@ public class ConnectionManager : MonoBehaviour
 
     public void OnPlayerJoin(SocketIOEvent ev)
     {// delete 1st ! to test solo
-        if (ev.data["id"].ToString().Substring(1, ev.data["id"].ToString().Length - 2).Equals(id) && !otherPlayers.ContainsKey(ev.data["id"].ToString()))
+        if (!ev.data["id"].ToString().Substring(1, ev.data["id"].ToString().Length - 2).Equals(id) && !otherPlayers.ContainsKey(ev.data["id"].ToString()))
         {
             GameObject newPlayer = (GameObject) Instantiate(otherPlayerPrefab);
             OtherPlayer newPlayerData = newPlayer.GetComponent<OtherPlayer>();
