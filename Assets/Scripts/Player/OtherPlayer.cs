@@ -23,14 +23,10 @@ public class OtherPlayer : MonoBehaviour
     //Move towards destination point (x,y).
     void Move()
     {
-        if(x != gameObject.transform.position.x && y != gameObject.transform.position.y)
-        {
-            Vector2 movement = new Vector3(x, y, 0) - transform.position;
-            movement = Vector2.ClampMagnitude(movement, 1f);
-            movement = movement * Speed * Time.deltaTime;
-            Rb.MovePosition(Rb.position + movement);
-        }
-        
+        Vector2 movement = new Vector2(x, y) - new Vector2(transform.position.x, transform.position.y);
+        movement = Vector2.ClampMagnitude(movement, 1f);
+        movement = movement * Speed * Time.deltaTime;
+        Rb.MovePosition(Rb.position + movement);      
     }
 
 }
