@@ -38,6 +38,8 @@ namespace UIChat
 
         public ConnectionManager connectionManager;
 
+        public GameObject Player;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -65,11 +67,20 @@ namespace UIChat
         public void InputFieldSelect()
         {
             InputActivate();
+            Player.GetComponent<PlayerMovement>().DeactivateInput();
         }
 
         public void InputFieldDeselect()
         {
             InputDeactivate();
+            Player.GetComponent<PlayerMovement>().ActivateInput();
+        }
+
+        IEnumerator ActivatePlayerInput()
+        {
+            Player.GetComponent<PlayerMovement>().ActivateInput();
+
+            yield return null;
         }
 
         public void ScrollButtonUp()

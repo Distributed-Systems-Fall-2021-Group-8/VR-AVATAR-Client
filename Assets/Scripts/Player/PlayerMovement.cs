@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float Speed = 10f;
 
+    private bool IsInputActive = true;
     private float HorizontalMovementInputValue;
     private float VerticalMovementInputValue;
 
@@ -22,9 +23,22 @@ public class PlayerMovement : MonoBehaviour
         VerticalMovementInputValue = Input.GetAxis("Vertical");
     }
 
+    public void ActivateInput()
+    {
+        IsInputActive = true;
+    }
+
+    public void DeactivateInput()
+    {
+        IsInputActive = false;
+    }
+
     private void FixedUpdate()
     {
-        Move();
+        if (IsInputActive)
+        {
+            Move();
+        }
     }
 
     private void Move()
